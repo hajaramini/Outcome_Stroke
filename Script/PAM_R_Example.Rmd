@@ -1,0 +1,180 @@
+---
+title: "PAM_R_Example"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#Start to learn pamr package by PAM commands for prediction.txt in the PAM_R_Example folder
+
+```{r}
+#library("pamr")
+mydata <- pamr.from.excel("../../PAM_R_Example/40_Genes_LV-CE_training_data.txt", 101, sample.labels=TRUE) 
+#for the above command, the 101 is the total number of columns including the probe names and all samples (2 + 99).  sample labels tells it that there is a sample name and classifying label to look for. Basically all this is doing is telling it where to start looking for the data and what are the labels.
+# now that the object 'mydata' is defined, all future references to 'mydata' will refer to the trainig set of known genes
+# Read 4242 items
+# 
+# Read in  40 genes
+# Read in  99 samples
+# Read in  99 sample labels
+# 
+# Make sure these figures are correct!!
+```
+
+```{r}
+#pamr.train trains PAM with the training data set and creates a new object 'mytrain'
+#A function that computes (fit) a nearest shrunken centroid for gene expression (microarray) data
+mytrain<-pamr.train(mydata) 
+```
+
+```{r}
+#reads the unknown samples into an object called 'predictset'
+predictset <- pamr.from.excel("../../PAM_R_Example/40_Genes_LV-CE_prediction_set.txt", 12, sample.labels=TRUE) #A function to read in a text file saved from Excel
+# the above runs the prediction algorithm established with the training set on the prediction set. the output is a table showing the percent certainty of classification into CE or LV cause of stroke.
+# Read in  40 genes
+# Read in  10 samples
+# Read in  10 sample labels
+# 
+# Make sure these figures are correct!!
+```
+
+```{r}
+PAMresult <- pamr.predict(mytrain, predictset$x , threshold=0, type= c("posterior")) #A function giving prediction information, from a nearest shrunken centroid fit
+
+#save
+write.csv(PAMresult, file="../PAMresult.csv")
+
+```
+
+```{r}
+#pamr.cv() A function to cross-validate the nearest shrunken centroid classifier produced by pamr.train
+new.scales <- pamr.adaptthresh(mytrain)
+mytrain2 <- pamr.train(mydata, threshold.scale=new.scales)
+myresults2 <- pamr.cv(mytrain2, mydata)
+#    threshold nonzero errors
+# 1  0.000     40      2     
+# 2  0.155     40      2     
+# 3  0.311     40      2     
+# 4  0.466     40      2     
+# 5  0.622     40      2     
+# 6  0.777     40      2     
+# 7  0.933     40      2     
+# 8  1.088     40      2     
+# 9  1.244     40      2     
+# 10 1.399     40      3     
+# 11 1.555     40      3     
+# 12 1.710     37      4     
+# 13 1.865     30      5     
+# 14 2.021     27      10    
+# 15 2.176     23      9     
+# 16 2.332     15      14    
+# 17 2.487     14      17    
+# 18 2.643     11      19    
+# 19 2.798      8      25    
+# 20 2.954      7      26    
+# 21 3.109      5      28    
+# 22 3.265      3      29    
+# 23 3.420      3      30    
+# 24 3.575      2      30    
+# 25 3.731      1      30    
+# 26 3.886      1      30    
+# 27 4.042      1      30    
+# 28 4.197      1      30    
+# 29 4.353      1      30    
+# 30 4.508      0      30 
+```
+
+```{r}
+#Downloaded khan.txt from http://statweb.stanford.edu/~tibs/PAM/Rdist/doc/readme.html
+khan.data <- pamr.from.excel("../../PAM_R_Example/khan.txt", 65, sample.labels=TRUE)
+
+```
+
+```{r}
+#To do a pam analysis, you can either run the various commands (e.g. pamr.train) one at a time, or use the function pamr.menu which interactively leads the user through a typical analysis. The individual commands used in a non-interactive analysis are documented below. The "non-interactive" analysis offers more control of input options.
+pamr.menu(khan.data)
+# 1:pamr.train 
+# 2:pamr.cv 
+# 3:pamr.plotcv 
+# 4:pamr.plotcen 
+# 5:pamr.confusion 
+# 6:pamr.plotcvprob 
+# 7:pamr.geneplot 
+# 8:pamr.listgenes 
+# 9:pamr.train with heterogeneity analysis 
+# 10:Exit 
+# Selection: 
+# The standard procedure is to begin by typing 1 to select pamr.train, and then after that computation is done, you would pick 2 for pamr.cv. Typically, you would go through steps 3 through 8, to generate plots and gene lists. Along the way, in some of the steps you are asked for a threshold value: this value you choose visually from the plot created by pamr.plotcv. Menu Choice 9 is optional.
+```
+
+```{r}
+#Here are the steps of a typical non-interactive analysis.
+# Train the classifier
+khan.train <- pamr.train(khan.data)
+
+# Type name of object to see the results
+khan.train
+```
+
+```{r}
+# Cross-validate the classifier
+khan.results<- pamr.cv(khan.train, khan.data)
+khan.results
+```
+
+```{r}
+#Plot the cross-validated error curves
+pamr.plotcv(khan.results)
+```
+
+```{r}
+# Compute the confusion matrix for a particular model (threshold=4.0) 
+pamr.confusion(khan.results, threshold=4.0)
+#     BL EWS NB RMS Class Error rate
+# BL   8   0  0   0                0
+# EWS  0  23  0   0                0
+# NB   0   0 12   0                0
+# RMS  0   0  0  20                0
+# Overall error rate= 0
+```
+
+```{r}
+# Plot the class centroids
+pamr.plotcen(khan.train, khan.data, threshold=4.0)
+
+# Make a gene plot of the most significant genes
+pamr.geneplot(khan.train, khan.data, threshold=5.3)
+
+```
+
+```{r}
+# List the significant genes
+pamr.listgenes(khan.train, khan.data, threshold=4.0)
+```
+
+```{r}
+## Try heterogeneity analysis, with class "BL" taken to be the normal group
+khan.train2 <- pamr.train(khan.data,hetero="BL")
+khan.results2 <-  pamr.cv(khan.train2, khan.data)
+
+```
+
+```{r}
+# Look for better threshold scalings
+khan.scales <- pamr.adaptthresh(khan.train)
+khan.train3 <- pamr.train(khan.data, threshold.scale=khan.scales)
+khan.results3 <-  pamr.cv(khan.train3, khan.data)
+```
+
+```{r}
+#Missing data
+#If you have missing expression data, you will first want to impute the missing values, before running pamr.train etc. For example, if khan.data had missing values---in reality, it does not---you would do
+khan.data2 <- pamr.knnimpute(khan.data)
+
+#khan.data3 <- pamr.batchadjust(khan.data2)
+#pamr.to.excel(khan.data3, file="khan3.txt")
+
+```
+

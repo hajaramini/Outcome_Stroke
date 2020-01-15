@@ -1,0 +1,114 @@
+---
+title: "Processing_Data"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#prepare the dataset to have all gene expression of three time course (3, 5, 24 hr) for all samples from IntNormOf192StrStAnd28UCDSS_MeanPrSetSummarAndLog2Import_SubtractGeoMeanOf38Normalizers_05-02-13_Opened08-13-15 partek spreadsheet
+
+```{r}
+#setwd("C:/Outcome_Stroke/Outcome_Stroke/script")
+# MyData <- read.csv(file="../Input/IntNormOf192StrStAnd28UCDSS_MeanPrSetSummarAndLog2Import_SubtractGeoMeanOf38Normalizers_05-02-13_Opened08-13-15_09-30-19.csv", header=TRUE, sep=",") #220 54683
+# 
+# #add additional column BloodDrawTime for each sample
+# MyData_Time <- read.csv(file = "../Input/IntNormOf192StrStAnd28UCDSS_MeanPrSetSummarAndLog2Import_SubtractGeoMeanOf38Normalizers_05-02-13_Opened08-13-15_WithTime_09-30-19.csv", header = T, sep = ",") #220 2
+# 
+# #merge two files
+# merge <- merge(MyData, MyData_Time, by = "Filename", all.x = TRUE, sort =TRUE) #220 54684
+
+```
+
+```{r}
+#save
+#save(merge, file = "../Input/IntNormOf192StrStAnd28UCDSS_MeanPrSetSummarAndLog2Import_SubtractGeoMeanOf38Normalizers_05-02-13_Opened08-13-15_WithTime_09-30-19.Rdata")
+#write.table(merge, file ="../Input/MyData_Time.txt", col.names= T, sep="\t")
+```
+
+```{r}
+#To have delta gene expression for differenet BloodDrawTime 
+# merge_3hr <- merge[merge$BloodDrawTime == "3",] #57 54684
+# rownames(merge_3hr) = merge_3hr$Filename
+# merge_5hr <- merge[merge$BloodDrawTime == "5",] #57 54684
+# rownames(merge_5hr) = merge_5hr$Filename
+# merge_24hr <- merge[merge$BloodDrawTime == "24",] #57 54684
+# rownames(merge_24hr) = merge_24hr$Filename
+# #delta from 3hr-5hr
+# merge_subtract3hrfrom5hr <- merge_3hr[,9:54683]-merge_5hr[,9:54683] #57 54675
+# merge_subtract3hrfrom5hr_NBDS_NBVS <- merge_subtract3hrfrom5hr[c(NBDS$Filename, NBVS$Filename),] #50 54675
+# merge_subtract3hrfrom24hr <- merge_3hr[,9:54683]-merge_24hr[,9:54683] #57 54675
+# merge_subtract3hrfrom24hr_NBDS_NBVS <- merge_subtract3hrfrom24hr[c(NBDS$Filename, NBVS$Filename),] #50 54675
+# merge_subtract5hrfrom24hr <- merge_5hr[,9:54683]-merge_24hr[,9:54683] #57 54675
+# merge_subtract5hrfrom24hr_NBDS_NBVS <- merge_subtract5hrfrom24hr[c(NBDS$Filename, NBVS$Filename),] #50 54675
+# 
+# 
+# write.table(merge_subtract3hrfrom5hr_NBDS_NBVS, file = "../Input/merge_subtract3hrfrom5hr.txt", col.names = T, sep = "\t")
+# write.table(merge_subtract3hrfrom24hr_NBDS_NBVS, file = "../Input/merge_subtract3hrfrom24hr.txt", col.names = T, sep = "\t")
+# write.table(merge_subtract5hrfrom24hr_NBDS_NBVS, file = "../Input/merge_subtract5hrfrom24hr.txt", col.names = T, sep = "\t")
+
+```
+
+```{r}
+#find another completed files for only 50 samples for TimeSinceEvent_BloodDraw_Hr == 3
+# NBDS <- read.csv(file="../Input/NBDS_NewCorrectedDerivationSet_02-21-13-IntNormOf192StrStAnd28UCDSS_MeanPrSetSummarAndLog2Import_SubtractGeoMeanOf38Normalizers.csv", row.names = 1, header=TRUE, sep=",",stringsAsFactors=FALSE ) #35 54918 
+# NBDS[NBDS == "?"] <- NA #convert ? in to NA
+# NBVS <- read.csv(file="../Input/NBVS_NewCorrectedDerivationSet_02-21-13-IntNormOf192StrStAnd28UCDSS_MeanPrSetSummarAndLog2Import_SubtractGeoMeanOf38Normalizers.csv", header=TRUE, row.names =1, sep=",", stringsAsFactors = FALSE) # 15 54915
+# NBVS[NBVS == "?"] <- NA #convert ? in to NA
+```
+
+```{r}
+#calculate delta for different NIHSS time-point for NBDS 
+#2 samples (14, 31) having NA for NBDS$X206SS_NIHSS_2hr, two samples were dead
+#1 sample (31) having NA for NBDS$X206SS_NIHSS_24hr
+#10 samples(4, 5, 7, 8, 14, 19, 21, 22, 30, 35) having NA for NBDS$Day90NIH, 4, 5, 7, 8, 14, 21, 30, 35 were dead
+NBDS$expdays
+#  [1] NA   NA   NA   "5"  "6"  NA   "7"  "30" NA   NA   NA   NA   NA   "6"  NA   NA   NA   NA   NA   NA   "18"
+# [22] NA   NA   NA   NA   NA   NA   NA   NA   "54" NA   NA   NA   NA   "14"
+
+NBDS$Day90NIH <- as.integer(NBDS$Day90NIH)
+NBDS$SubtractNIHSSbasefromNIHSS2hr <- NBDS$X206SS_NIHSS_Base - NBDS$X206SS_NIHSS_2hr
+NBDS$SubtractNIHSSbasefromNIHSS24hr <- NBDS$X206SS_NIHSS_Base - NBDS$X206SS_NIHSS_24hr
+NBDS$SubtractNIHSSbasefromNIHSS5day <- NBDS$X206SS_NIHSS_Base - NBDS$X206SS_NIHSS_5day
+NBDS$SubtractNIHSSbasefromDay90NIH <- NBDS$X206SS_NIHSS_Base - NBDS$Day90NIH
+
+
+NBDS$SubtractNIHSS2hrfromNIHSS24hr <- NBDS$X206SS_NIHSS_2hr - NBDS$X206SS_NIHSS_24hr
+NBDS$SubtractNIHSS2hrfromNIHSS5day <- NBDS$X206SS_NIHSS_2hr - NBDS$X206SS_NIHSS_5day
+NBDS$SubtractNIHSS2hrfromDay90NIH <- NBDS$X206SS_NIHSS_2hr - NBDS$Day90NIH
+
+NBDS$SubtractNIHSS24hrfromNIHSS5day <- NBDS$X206SS_NIHSS_24hr - NBDS$X206SS_NIHSS_5day
+NBDS$SubtractNIHSS24hrfromDay90NIH <- NBDS$X206SS_NIHSS_24hr - NBDS$Day90NIH
+
+NBDS$SubtractNIHSS5dayfromDay90NIH <- NBDS$X206SS_NIHSS_5day - NBDS$Day90NIH
+```
+
+```{r}
+#calculate delta for different NIHSS time-point for NBVS
+#3 samples (2, 11, 15 )having NA for NBVS$Day90NIH, sample 15 was dead
+NBVS$expdays
+# [1] NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   "14"
+
+NBVS$Day90NIH <- as.integer(NBVS$Day90NIH)
+NBVS$SubtractNIHSSbasefromNIHSS2hr <- NBVS$X206SS_NIHSS_Base - NBVS$X206SS_NIHSS_2hr
+NBVS$SubtractNIHSSbasefromNIHSS24hr <- NBVS$X206SS_NIHSS_Base - NBVS$X206SS_NIHSS_24hr
+NBVS$SubtractNIHSSbasefromNIHSS5day <- NBVS$X206SS_NIHSS_Base - NBVS$X206SS_NIHSS_5day
+NBVS$SubtractNIHSSbasefromDay90NIH <- NBVS$X206SS_NIHSS_Base - NBVS$Day90NIH
+
+
+NBVS$SubtractNIHSS2hrfromNIHSS24hr <- NBVS$X206SS_NIHSS_2hr - NBVS$X206SS_NIHSS_24
+NBVS$SubtractNIHSS2hrfromDay90NIH <- NBVS$X206SS_NIHSS_2hr - NBVS$Day90NIH
+
+NBVS$SubtractNIHSS24hrfromNIHSS5day <- NBVS$X206SS_NIHSS_24hr - NBVS$X206SS_NIHSS_5day
+NBVS$SubtractNIHSS24hrfromDay90NIH <- NBVS$X206SS_NIHSS_24hr - NBVS$Day90NIH
+
+NBVS$SubtractNIHSS5dayfromDay90NIH <- NBVS$X206SS_NIHSS_5day - NBVS$Day90NIH
+```
+
+```{r}
+#save the modified NBVS and NBDS
+save(NBDS, NBVS, file = "../Input/RData/NBDS_NBVS.RData")
+
+```
+
