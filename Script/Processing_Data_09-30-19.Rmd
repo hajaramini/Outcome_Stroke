@@ -10,16 +10,61 @@ knitr::opts_chunk$set(echo = TRUE)
 #prepare the dataset to have all gene expression of three time course (3, 5, 24 hr) for all samples from IntNormOf192StrStAnd28UCDSS_MeanPrSetSummarAndLog2Import_SubtractGeoMeanOf38Normalizers_05-02-13_Opened08-13-15 partek spreadsheet
 
 ```{r}
-#setwd("C:/Outcome_Stroke/Outcome_Stroke/script")
-# MyData <- read.csv(file="../Input/IntNormOf192StrStAnd28UCDSS_MeanPrSetSummarAndLog2Import_SubtractGeoMeanOf38Normalizers_05-02-13_Opened08-13-15_09-30-19.csv", header=TRUE, sep=",") #220 54683
-# 
-# #add additional column BloodDrawTime for each sample
-# MyData_Time <- read.csv(file = "../Input/IntNormOf192StrStAnd28UCDSS_MeanPrSetSummarAndLog2Import_SubtractGeoMeanOf38Normalizers_05-02-13_Opened08-13-15_WithTime_09-30-19.csv", header = T, sep = ",") #220 2
-# 
-# #merge two files
-# merge <- merge(MyData, MyData_Time, by = "Filename", all.x = TRUE, sort =TRUE) #220 54684
+#setwd("C:/Outcome/R_Outcome_Stroke/Outcome_Stroke")
+MyData <- read.csv(file="../../Input_Output/IntNormOf192StrStAnd28UCDSS_MeanPrSetSummarAndLog2Import_SubtractGeoMeanOf38Normalizers_05-02-13_Opened08-13-15_09-30-19.csv", header=TRUE, sep=",", stringsAsFactors = FALSE) #220 54683
+
+Parameter <- read.csv(file="../../Input_Output/Param_Outcome_01-14-20.csv", header=TRUE, sep=",", stringsAsFactors = FALSE) #206 9
+
+BloodDrawTime <-read.csv(file="../../Input_Output/BloodDrawTime_03-02-20.csv", header=TRUE, sep=",", stringsAsFactors = FALSE) #220 2
+
+merge<- merge.data.frame(Parameter,BloodDrawTime) #171 10
+
+Demographic <- read.csv(file="../../Input_Output/50_Demographic_03-02-20.csv", header=TRUE, sep=",", stringsAsFactors = FALSE) #50 238
+
+merge_v2<- merge.data.frame(merge,Demographic) #50 240
+
+merge_v3 <- merge.data.frame(merge,MyData, by= "Filename") #171 54692 having GE for all 50 samples for all BloodDrawTime == "3" , "5" ,"24"
+
+merge_v3_3hr <- (subset(merge_v3, BloodDrawTime == 3)) #57 54692
+merge_v3_3hr_v2 <- merge.data.frame(merge_v3_3hr,merge_v2, by = "Filename", all.y = T) #50 54931, including demographics and GE for BloodDrawTime == "3" for the 50 samples from Boryana Trial
+
+merge_v3_5hr <- (subset(merge_v3, BloodDrawTime == "5")) #57 54692
+merge_v3_5hr_v2 <- merge.data.frame(merge_v3_5hr,merge_v2, by = "Filename", all.y = T) #50 54931, including demographics and GE for BloodDrawTime == "5" for the 50 samples from Boryana Trial
+
+merge_v3_24hr <- (subset(merge_v3, BloodDrawTime == 24)) ##57 54692
+merge_v3_24hr_v2 <- merge.data.frame(merge_v3_24hr,merge_v2, by = "Filename", all.y = T) #50 54931, including demographics and GE for BloodDrawTime == "24" for the 50 samples from Boryana Trial 
+
+merge_v4 <- merge.data.frame(merge_v2, MyData, by= "Filename") # 50 54922 having GE for all 50 samples for BloodDrawTime == "3"
+
 
 ```
+
+```{r}
+save(merge_v2, file = "../../Input_Output/RData/50_Demographic_03-02-20.RData")
+save(merge_v3_3hr_v2, file = "../../Input_Output/RData/50_Demographic_GE_3hr_03-02-20.RData")
+save(merge_v3_5hr_v2, file = "../../Input_Output/RData/50_Demographic_GE_5hr_03-02-20.RData")
+save(merge_v3_24hr_v2, file = "../../Input_Output/RData/50_Demographic_GE_24hr_03-02-20.RData")
+
+
+write.table(merge_v2,file = "../../Input_Output/50_Demographic_Parameter_03-02-20.txt", col.names = T, sep = "\t") #can use this for downstream analysis. ALso use this for adding more parameters
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ```{r}
 #save
