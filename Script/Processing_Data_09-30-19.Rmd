@@ -95,7 +95,88 @@ write.csv(fivehrsubtracttwentyfourhr,file = "../../Input_Output/5hrSubtract24hr_
 
 ```
 
+```{r}
+#Merge the demographic with the Xu file which is sent from Jane (most of the columns are same)
+Xu_HumanStrokeSampleMedicalInfo <- read.csv("C:/Outcome/R_Outcome_Stroke/Input_Output/Xu_HumanStrokeSampleMedicalInfo_12-20-08_03-09-20.csv", stringsAsFactors = FALSE) #50 75
+#import the demographic file
+Demographic_Parameter <- read.delim("C:/Outcome/R_Outcome_Stroke/Input_Output/50_Demographic_Parameter_03-02-20.txt", stringsAsFactors = FALSE)
+x<- cbind.data.frame(Xu_HumanStrokeSampleMedicalInfo, Demographic_Parameter) #50 316
+write.csv(x,file = "../../Input_Output/50_Demographic_Parameter_Xu_HumanStrokeSampleMedicalInfo_03-04-20.csv") 
 
+```
+
+```{r}
+#Exclude Filename with ? for NIHSS outcome
+exclude <- c("107-0-2_HGU133_Plus_2.CEL","108-B_HGU133_Plus_2.CEL","263-B_HGU133_Plus_2.CEL","CL52-0-4_redo_HGU133_Plus_2.CEL","CL11-0-6_HGU133_Plus_2.CEL","CL118-0-1_HGU133_Plus_2.CEL","CL123-0-4_HGU133_Plus_2.CEL","CL16-0-3_HGU133_Plus_2.CEL","235-B-1_HGU133_Plus_2.CEL","238-B-1_HGU133_Plus_2.CEL","243-B-4_HGU133_Plus_2.CEL","CL32-0-4_HGU133_Plus_2.CEL","CL34-0-1_HGU133_Plus_2.CEL","97-B-2_HGU133_Plus_2.CEL") #14
+```
+
+```{r}
+#exlude the Filename with ? for outcome
+Demographic_Parameter_low = Demographic_Parameter[!row.names(Demographic_Parameter)%in%exclude,] #36 241
+write.csv(Demographic_Parameter_low,file = "../../Input_Output/36_Demographic_Parameter_Xu_HumanStrokeSampleMedicalInfo_03-04-11.csv")
+
+#keep all the demographic parameters as one file
+Demographic_Parameter_low <- read.csv("C:/Outcome/R_Outcome_Stroke/Input_Output/36_Demographic_Parameter_Xu_HumanStrokeSampleMedicalInfo_03-04-11.csv", row.names=1, stringsAsFactors = FALSE)
+Demographic_CLEAR <- read.csv("C:/Outcome/R_Outcome_Stroke/Input_Output/Boryana Stamova 03-11-2020 CLEAR.csv", stringsAsFactors = FALSE)
+
+Demographic_CLEAR$Bar_Code
+rownames(Demographic_CLEAR) <- Demographic_CLEAR$Bar_Code
+x <- rownames(Demographic_CLEAR)
+y <- as.integer(x)
+
+include <- Demographic_Parameter_low$X206SS_Bar_Code
+Demographic_CLEAR_low <- Demographic_CLEAR[x%in%include,] #36 202
+
+#merge two demographic files including duplication for most of the parameters
+Demographic_all <-cbind.data.frame(Demographic_Parameter_low,Demographic_CLEAR_low) #36 443
+rownames(Demographic_all) <- Demographic_all$Filename
+```
+
+```{r}
+#save
+write.csv(Demographic_all,file = "../../Input_Output/36_Demographic_Parameter_All_03-16-20.csv")
+```
+
+```{r}
+#Split 36 samples into 25 DS and 11 VS
+DS_Filename <- c("CL102-0-3_HGU133_Plus_2.CEL.pimg","CL104-0-1_HGU133_Plus_2.CEL.pimg","105-B-6_HGU133_Plus_2.CEL.pimg","112-B-2_HGU133_Plus_2.CEL.pimg","CL130-0-6_HGU133_Plus_2.CEL.pimg","CL131-0-4_HGU133_Plus_2.CEL.pimg","CL132-0-3_HGU133_Plus_2.CEL.pimg","CL135-0-2_HGU133_Plus_2.CEL.pimg","CL138-0-6_HGU133_Plus_2.CEL.pimg","201-B-3_HGU133_Plus_2_2.CEL.pimg","210-B-4_HGU133_Plus_2.CEL.pimg","CL22-0-5_HGU133_Plus_2.CEL.pimg","225-B-2_HGU133_Plus_2.CEL.pimg","236-B-3_HGU133_Plus_2.CEL.pimg","255-B-3_HGU133_Plus_2.CEL.pimg","261-B-3_HGU133_Plus_2.CEL.pimg","262-B-5_HGU133_Plus_2.CEL.pimg","278-B-5_HGU133_Plus_2.CEL.pimg","279-B-3_HGU133_Plus_2.CEL.pimg","287-B-4_HGU133_Plus_2.CEL.pimg","289-B-3_HGU133_Plus_2.CEL.pimg","CL38-0-5_HGU133_Plus_2.CEL.pimg","CL55-0-2_HGU133_Plus_2.CEL.pimg","CL56-0-3_HGU133_Plus_2.CEL.pimg","CL150-0-2_HGU133_Plus_2.CEL.pimg") #25
+
+DS_Filename_v2 <- gsub(".pimg", "", DS_Filename) #remove pimg from end of the filename
+  
+VS_Filename <- c("100-0-3_HGU133_Plus_2.CEL.pimg","CL113-0-3_HGU133_Plus_2.CEL.pimg","CL134-0-5_HGU133_Plus_2.CEL.pimg", "CL136-0-5_HGU133_Plus_2.CEL.pimg","CL18-0-4_HGU133_Plus_2.CEL.pimg","211-B_HGU133_Plus_2.CEL.pimg","230-B-4_HGU133_Plus_2.CEL.pimg","234-B-3_HGU133_Plus_2.CEL.pimg","266-B-2_HGU133_Plus_2.CEL.pimg","271-B-5_HGU133_Plus_2.CEL.pimg","35-B-6_HGU133_Plus_2.CEL.pimg") #11
+
+VS_Filename_v2 <- gsub(".pimg", "", VS_Filename) #remove pimg from end of the filename
+
+DS_Demographic_all <- Demographic_all[rownames(Demographic_all)%in%DS_Filename_v2,] #25 443
+VS_Demographic_all <- Demographic_all[rownames(Demographic_all)%in%VS_Filename_v2,] #11 443
+```
+
+```{r}
+#save
+write.csv(DS_Demographic_all,file = "../../Input_Output/25_Demographic_Parameter_All_03-16-20.csv")
+save(DS_Demographic_all,file = "../../Input_Output/RData/DS_Demographic_all.RData")
+
+write.csv(VS_Demographic_all,file = "../../Input_Output/11_Demographic_Parameter_All_03-16-20.csv")
+save(VS_Demographic_all,file = "../../Input_Output/RData/VS_Demographic_all.RData")
+```
+
+
+NBDS <- read.csv(file="../../Input_Output/NBDS_NewCorrectedDerivationSet_02-21-13-IntNormOf192StrStAnd28UCDSS_MeanPrSetSummarAndLog2Import_SubtractGeoMeanOf38Normalizers.csv", row.names = 1, header=TRUE, sep=",",stringsAsFactors=FALSE ) #35 54918 
+NBDS[NBDS == "?"] <- NA #convert ? in to NA
+NBVS <- read.csv(file="../../Input_Output/NBVS_NewCorrectedDerivationSet_02-21-13-IntNormOf192StrStAnd28UCDSS_MeanPrSetSummarAndLog2Import_SubtractGeoMeanOf38Normalizers.csv", header=TRUE, row.names =1, sep=",", stringsAsFactors = FALSE) # 15 54915
+# NBVS[NBVS == "?"] <- NA #convert ? in to NA
+```
+
+
+
+```{r}
+#back
+load( "../Input_Output/RData/3hrSubtract5hr_GE_03-04-20.RData")
+threehrsubtractfivehr %>% dim() #50 54675
+
+
+
+```
 
 
 
