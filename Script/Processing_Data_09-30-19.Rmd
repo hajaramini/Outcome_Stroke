@@ -98,9 +98,10 @@ write.csv(fivehrsubtracttwentyfourhr,file = "../../Input_Output/5hrSubtract24hr_
 ```{r}
 #Merge the demographic with the Xu file which is sent from Jane (most of the columns are same)
 Xu_HumanStrokeSampleMedicalInfo <- read.csv("C:/Outcome/R_Outcome_Stroke/Input_Output/Xu_HumanStrokeSampleMedicalInfo_12-20-08_03-09-20.csv", stringsAsFactors = FALSE) #50 75
+Xu_HumanStrokeSampleMedicalInfo_sort <- Xu_HumanStrokeSampleMedicalInfo[order(Xu_HumanStrokeSampleMedicalInfo$X206SS_Subject.ID),]
 #import the demographic file
 Demographic_Parameter <- read.delim("C:/Outcome/R_Outcome_Stroke/Input_Output/50_Demographic_Parameter_03-02-20.txt", stringsAsFactors = FALSE)
-x<- cbind.data.frame(Xu_HumanStrokeSampleMedicalInfo, Demographic_Parameter) #50 316
+x<- cbind.data.frame(Xu_HumanStrokeSampleMedicalInfo_sort, Demographic_Parameter) #50 316
 write.csv(x,file = "../../Input_Output/50_Demographic_Parameter_Xu_HumanStrokeSampleMedicalInfo_03-04-20.csv") 
 
 ```
@@ -112,29 +113,34 @@ exclude <- c("107-0-2_HGU133_Plus_2.CEL","108-B_HGU133_Plus_2.CEL","263-B_HGU133
 
 ```{r}
 #exlude the Filename with ? for outcome
+rownames(Demographic_Parameter) <- Demographic_Parameter$Filename
 Demographic_Parameter_low = Demographic_Parameter[!row.names(Demographic_Parameter)%in%exclude,] #36 241
 write.csv(Demographic_Parameter_low,file = "../../Input_Output/36_Demographic_Parameter_Xu_HumanStrokeSampleMedicalInfo_03-04-11.csv")
 
 #keep all the demographic parameters as one file
 Demographic_Parameter_low <- read.csv("C:/Outcome/R_Outcome_Stroke/Input_Output/36_Demographic_Parameter_Xu_HumanStrokeSampleMedicalInfo_03-04-11.csv", row.names=1, stringsAsFactors = FALSE)
 Demographic_CLEAR <- read.csv("C:/Outcome/R_Outcome_Stroke/Input_Output/Boryana Stamova 03-11-2020 CLEAR.csv", stringsAsFactors = FALSE)
+Demographic_CLEAR_sort <- Demographic_CLEAR[order(Demographic_CLEAR$Bar_Code),]
 
 Demographic_CLEAR$Bar_Code
-rownames(Demographic_CLEAR) <- Demographic_CLEAR$Bar_Code
-x <- rownames(Demographic_CLEAR)
+rownames(Demographic_CLEAR_sort) <- Demographic_CLEAR_sort$Bar_Code
+x <- rownames(Demographic_CLEAR_sort)
 y <- as.integer(x)
 
-include <- Demographic_Parameter_low$X206SS_Bar_Code
-Demographic_CLEAR_low <- Demographic_CLEAR[x%in%include,] #36 202
+Demographic_Parameter_low_sort <- Demographic_Parameter_low[order(Demographic_Parameter_low$X206SS_Bar_Code),]
+include <- Demographic_Parameter_low_sort$X206SS_Bar_Code
+
+Demographic_CLEAR_low_sort <- Demographic_CLEAR_sort[x%in%include,] #36 202 some parameters are only available in this file: cbleed, F4Q7a, F4Q7b, F4Q7c, F4Q7d, Day5Paralyzed, BaseLesionVolumecc, Hour24LesionVolumecc, smokingstatus
+
 
 #merge two demographic files including duplication for most of the parameters
-Demographic_all <-cbind.data.frame(Demographic_Parameter_low,Demographic_CLEAR_low) #36 443
-rownames(Demographic_all) <- Demographic_all$Filename
+Demographic_all_sort <-cbind.data.frame(Demographic_Parameter_low_sort,Demographic_CLEAR_low_sort) #36 443
+rownames(Demographic_all_sort) <- Demographic_all_sort$Filename
 ```
 
 ```{r}
 #save
-write.csv(Demographic_all,file = "../../Input_Output/36_Demographic_Parameter_All_03-16-20.csv")
+write.csv(Demographic_all_sort,file = "../../Input_Output/36_Demographic_Parameter_All_03-16-20.csv")
 ```
 
 ```{r}
@@ -147,10 +153,10 @@ VS_Filename <- c("100-0-3_HGU133_Plus_2.CEL.pimg","CL113-0-3_HGU133_Plus_2.CEL.p
 
 VS_Filename_v2 <- gsub(".pimg", "", VS_Filename) #remove pimg from end of the filename
 
-DS_Demographic_all <- Demographic_all[rownames(Demographic_all)%in%DS_Filename_v2,] #25 443
-VS_Demographic_all <- Demographic_all[rownames(Demographic_all)%in%VS_Filename_v2,] #11 443
+DS_Demographic_all <- Demographic_all_sort[rownames(Demographic_all_sort)%in%DS_Filename_v2,] #25 443
+VS_Demographic_all <- Demographic_all_sort[rownames(Demographic_all_sort)%in%VS_Filename_v2,] #11 443
 ```
-
+  
 ```{r}
 #save
 write.csv(DS_Demographic_all,file = "../../Input_Output/25_Demographic_Parameter_All_03-16-20.csv")
@@ -158,6 +164,10 @@ save(DS_Demographic_all,file = "../../Input_Output/RData/DS_Demographic_all.RDat
 
 write.csv(VS_Demographic_all,file = "../../Input_Output/11_Demographic_Parameter_All_03-16-20.csv")
 save(VS_Demographic_all,file = "../../Input_Output/RData/VS_Demographic_all.RData")
+```
+
+```{r}
+#subtract
 ```
 
 
