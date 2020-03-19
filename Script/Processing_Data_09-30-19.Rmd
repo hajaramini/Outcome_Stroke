@@ -168,6 +168,9 @@ save(VS_Demographic_all,file = "../../Input_Output/RData/VS_Demographic_all.RDat
 
 ```{r}
 #subtract
+#calculate the subtract and %improvement and paste into 25_Demographic_Parameter_All_03-16-20.csv file, convert "0" as a NIHSS lower into "0.5" to calculate the %improvement
+#import
+
 ```
 
 
