@@ -170,22 +170,78 @@ save(VS_Demographic_all,file = "../../Input_Output/RData/VS_Demographic_all.RDat
 #subtract
 #calculate the subtract and %improvement and paste into 25_Demographic_Parameter_All_03-16-20.csv file, convert "0" as a NIHSS lower into "0.5" to calculate the %improvement
 #import
-
+DS_Demographic <- read.csv("C:/Outcome/R_Outcome_Stroke/Input_Output/25_Demographic_Parameter_All_03-16-20.csv", row.names=1, stringsAsFactors = FALSE) #25 463 
 ```
 
+```{r}
+#load files including subtract for the GE threehrsubtractfivehr
+load( "../Input_Output/RData/3hrSubtract5hr_GE_03-04-20.RData") 
+threehrsubtractfivehr %>% dim() #50 54675
+threehrsubtractfivehr_sort <- threehrsubtractfivehr[order(rownames(threehrsubtractfivehr)),] #50 54675
 
-NBDS <- read.csv(file="../../Input_Output/NBDS_NewCorrectedDerivationSet_02-21-13-IntNormOf192StrStAnd28UCDSS_MeanPrSetSummarAndLog2Import_SubtractGeoMeanOf38Normalizers.csv", row.names = 1, header=TRUE, sep=",",stringsAsFactors=FALSE ) #35 54918 
-NBDS[NBDS == "?"] <- NA #convert ? in to NA
-NBVS <- read.csv(file="../../Input_Output/NBVS_NewCorrectedDerivationSet_02-21-13-IntNormOf192StrStAnd28UCDSS_MeanPrSetSummarAndLog2Import_SubtractGeoMeanOf38Normalizers.csv", header=TRUE, row.names =1, sep=",", stringsAsFactors = FALSE) # 15 54915
-# NBVS[NBVS == "?"] <- NA #convert ? in to NA
+
+load( file = "../../Input_Output/RData/5hrSubtract24hr_GE_03-04-20.RData")
+
+
+#merge two dataframe of NIHSS and GE
+
+x <- rownames(DS_Demographic)
+DS_GE_threehrsubtractfivehr <- threehrsubtractfivehr[rownames(threehrsubtractfivehr)%in%x,] #25 54675
+d <- DS_Demographic
+names <- rownames(d)
+rownames(d) <- NULL
+data <- cbind(names,d) #25 464
+
+c <- DS_GE_threehrsubtractfivehr
+names <- rownames(c)
+rownames(c) <- NULL
+data2 <- cbind(names,c) #25 54676
+
+DS_GE_threehrsubtractfivehr <- merge( data, data2, by="names") # 25 55139
+
+#save
+write.csv(DS_GE_threehrsubtractfivehr,file = "../../Input_Output/25_Demographic_Parameter_GE_threehrsubtractfivehr_03-19-20.csv")
+save(DS_GE_threehrsubtractfivehr,file = "../../Input_Output/RData/25_Demographic_Parameter_GE_threehrsubtractfivehr.RData")
 ```
-
 
 
 ```{r}
-#back
-load( "../Input_Output/RData/3hrSubtract5hr_GE_03-04-20.RData")
-threehrsubtractfivehr %>% dim() #50 54675
+#load files including subtract for the GE threehrsubtracttwentyfourhr
+load(file = "../../Input_Output/RData/3hrSubtract24hr_GE_03-04-20.RData")
+threehrsubtracttwentyfourhr %>% dim() #50 54675
+
+#merge two dataframe of NIHSS and GE
+
+x <- rownames(DS_Demographic)
+DS_GE_threehrsubtractfivehr <- threehrsubtractfivehr[rownames(threehrsubtractfivehr)%in%x,] #25 54675
+d <- DS_Demographic
+names <- rownames(d)
+rownames(d) <- NULL
+data <- cbind(names,d) #25 464
+
+c <- DS_GE_threehrsubtractfivehr
+names <- rownames(c)
+rownames(c) <- NULL
+data2 <- cbind(names,c) #25 54676
+
+DS_GE_threehrsubtractfivehr <- merge( data, data2, by="names") # 25 55139
+
+#save
+write.csv(DS_GE_threehrsubtractfivehr,file = "../../Input_Output/25_Demographic_Parameter_GE_threehrsubtractfivehr_03-19-20.csv")
+save(DS_GE_threehrsubtractfivehr,file = "../../Input_Output/RData/25_Demographic_Parameter_GE_threehrsubtractfivehr.RData")
+
+
+DS_GE_threehrsubtractfivehr <- merge( data, data2, by="names")
+
+
+merge(DS_Demographic,DS_GE_threehrsubtractfivehr, sort = TRUE)
+
+VS_Demographic_all <- Demographic_all_sort[rownames(Demographic_all_sort)%in%VS_Filename_v2,] #11 443
+
+DS_GE_threehrsubtractfivehr
+
+
+
 
 
 
