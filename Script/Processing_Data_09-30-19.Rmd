@@ -177,11 +177,6 @@ DS_Demographic <- read.csv("C:/Outcome/R_Outcome_Stroke/Input_Output/25_Demograp
 #load files including subtract for the GE threehrsubtractfivehr
 load( "../Input_Output/RData/3hrSubtract5hr_GE_03-04-20.RData") 
 threehrsubtractfivehr %>% dim() #50 54675
-threehrsubtractfivehr_sort <- threehrsubtractfivehr[order(rownames(threehrsubtractfivehr)),] #50 54675
-
-
-load( file = "../../Input_Output/RData/5hrSubtract24hr_GE_03-04-20.RData")
-
 
 #merge two dataframe of NIHSS and GE
 
@@ -213,44 +208,83 @@ threehrsubtracttwentyfourhr %>% dim() #50 54675
 #merge two dataframe of NIHSS and GE
 
 x <- rownames(DS_Demographic)
-DS_GE_threehrsubtractfivehr <- threehrsubtractfivehr[rownames(threehrsubtractfivehr)%in%x,] #25 54675
-d <- DS_Demographic
-names <- rownames(d)
-rownames(d) <- NULL
-data <- cbind(names,d) #25 464
+DS_GE_threehrsubtracttwentyfourhr <- threehrsubtracttwentyfourhr[rownames(threehrsubtracttwentyfourhr)%in%x,] #25 54675
+#d <- DS_Demographic
+#names <- rownames(d)
+#rownames(d) <- NULL
+#data <- cbind(names,d) #25 464
 
-c <- DS_GE_threehrsubtractfivehr
+c <- DS_GE_threehrsubtracttwentyfourhr
 names <- rownames(c)
 rownames(c) <- NULL
 data2 <- cbind(names,c) #25 54676
 
-DS_GE_threehrsubtractfivehr <- merge( data, data2, by="names") # 25 55139
+DS_GE_threehrsubtracttwentyfourhr <- merge(data, data2, by="names") # 25 55139
 
 #save
-write.csv(DS_GE_threehrsubtractfivehr,file = "../../Input_Output/25_Demographic_Parameter_GE_threehrsubtractfivehr_03-19-20.csv")
-save(DS_GE_threehrsubtractfivehr,file = "../../Input_Output/RData/25_Demographic_Parameter_GE_threehrsubtractfivehr.RData")
-
-
-DS_GE_threehrsubtractfivehr <- merge( data, data2, by="names")
-
-
-merge(DS_Demographic,DS_GE_threehrsubtractfivehr, sort = TRUE)
-
-VS_Demographic_all <- Demographic_all_sort[rownames(Demographic_all_sort)%in%VS_Filename_v2,] #11 443
-
-DS_GE_threehrsubtractfivehr
-
-
-
-
-
+write.csv(DS_GE_threehrsubtracttwentyfourhr,file = "../../Input_Output/25_Demographic_Parameter_GE_threehrsubtracttwentyfourhr_03-20-20.csv")
+save(DS_GE_threehrsubtracttwentyfourhr,file = "../../Input_Output/RData/25_Demographic_Parameter_GE_threehrsubtracttwentyfourhr.RData")
 
 ```
 
 
+```{r}
+#load files including subtract for the GE fivehrsubtracttwentyfourhr
+load(file = "../../Input_Output/RData/5hrSubtract24hr_GE_03-04-20.RData")
+fivehrsubtracttwentyfourhr %>% dim() #50 54675
+
+x <- rownames(DS_Demographic)
+DS_GE_fivehrsubtracttwentyfourhr <- fivehrsubtracttwentyfourhr[rownames(fivehrsubtracttwentyfourhr)%in%x,] #25 54675
+#d <- DS_Demographic
+#names <- rownames(d)
+#rownames(d) <- NULL
+#data <- cbind(names,d) #25 464
+
+d <- DS_GE_fivehrsubtracttwentyfourhr
+names <- rownames(d)
+rownames(d) <- NULL
+data2 <- cbind(names,d) #25 54676
+
+DS_GE_fivehrsubtracttwentyfourhr <- merge(data, data2, by="names") # 25 55139
+
+#save
+write.csv(DS_GE_fivehrsubtracttwentyfourhr,file = "../../Input_Output/25_Demographic_Parameter_DS_GE_fivehrsubtracttwentyfourhr_03-20-20.csv")
+save(DS_GE_fivehrsubtracttwentyfourhr,file = "../../Input_Output/RData/25_Demographic_Parameter_GE_fivehrsubtracttwentyfourhr.RData")
+```
 
 
+```{r}
+#load files including GE for 3hr, 5hr and 24hr with Demographic parameters
+load(file = "../../Input_Output/RData/50_Demographic_GE_3hr_03-02-20.RData")
+merge_v3_3hr_v2 %>% dim() #50 54692
 
+x <- rownames(DS_Demographic)
+DS_GE_threehr <- merge_v3_3hr_v2[rownames(merge_v3_3hr_v2)%in%x,] #25 54692 
+#d <- DS_Demographic
+#names <- rownames(d)
+#rownames(d) <- NULL
+#data <- cbind(names,d) #25 464
+
+d <- DS_GE_threehr
+names <- rownames(d)
+rownames(d) <- NULL
+data2 <- cbind(names,d) #25 54676
+
+#Here
+DS_GE_threehr <- merge(data, data2, by="names") # 25 55156 (x, y in suffix for two files) #55156
+
+#save
+write.csv(DS_GE_threehr,file = "../../Input_Output/25_Demographic_Parameter_GE_threehr_03-20-20.csv")
+save(DS_GE_threehr,file = "../../Input_Output/RData/25_Demographic_Parameter_GE_threehr.RData")
+
+
+save(merge_v3_3hr, file = "../../Input_Output/RData/57_Demographic_GE_3hr_03-02-20.RData")
+save(merge_v3_3hr_v2, file = "../../Input_Output/RData/50_Demographic_GE_3hr_03-02-20.RData")
+save(merge_v3_5hr, file = "../../Input_Output/RData/57_Demographic_GE_5hr_03-02-20.RData")
+save(merge_v3_5hr_v2, file = "../../Input_Output/RData/50_Demographic_GE_5hr_03-02-20.RData")
+save(merge_v3_24hr, file = "../../Input_Output/RData/57_Demographic_GE_24hr_03-02-20.RData")
+save(merge_v3_24hr_v2, file = "../../Input_Output/RData/50_Demographic_GE_24hr_03-02-20.RData"
+```
 
 
 
