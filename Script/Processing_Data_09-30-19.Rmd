@@ -13,38 +13,59 @@ knitr::opts_chunk$set(echo = TRUE)
 #setwd("C:/Outcome/R_Outcome_Stroke/Outcome_Stroke")
 MyData <- read.csv(file="../../Input_Output/IntNormOf192StrStAnd28UCDSS_MeanPrSetSummarAndLog2Import_SubtractGeoMeanOf38Normalizers_05-02-13_Opened08-13-15_09-30-19.csv", header=TRUE, sep=",", stringsAsFactors = FALSE) #220 54683
 
-Parameter <- read.csv(file="../../Input_Output/Param_Outcome_01-14-20.csv", header=TRUE, sep=",", stringsAsFactors = FALSE) #206 9
+#Parameter <- read.csv(file="../../Input_Output/Param_Outcome_01-14-20.csv", header=TRUE, sep=",", stringsAsFactors = FALSE, row.names = 1) #206 9
 
 BloodDrawTime <-read.csv(file="../../Input_Output/BloodDrawTime_03-02-20.csv", header=TRUE, sep=",", stringsAsFactors = FALSE) #220 2
 
-merge<- merge.data.frame(Parameter,BloodDrawTime) #171 10
+merge<- cbind(MyData,BloodDrawTime) # 220 54685
 
-Demographic <- read.csv(file="../../Input_Output/50_Demographic_03-02-20.csv", header=TRUE, sep=",", stringsAsFactors = FALSE) #50 238
+##Demographic <- read.csv(file="../../Input_Output/50_Demographic_03-02-20.csv", header=TRUE, sep=",", stringsAsFactors = FALSE) #50 238
 
-merge_v2<- merge.data.frame(merge,Demographic) #50 240
+##merge_v2<- merge.data.frame(merge,Demographic) #50 240
 
-merge_v3 <- merge.data.frame(merge,MyData, by= "Filename") #171 54692 having GE for all 50 samples for all BloodDrawTime == "3" , "5" ,"24"
+##merge_v3 <- merge.data.frame(merge,MyData, by= "Filename") #171 54692 having GE for all 50 samples for all BloodDrawTime == "3" , "5" ,"24"
 
-merge_v3_3hr <- (subset(merge_v3, BloodDrawTime == 3))
-rownames(merge_v3_3hr) <-merge_v3_3hr[,1] #57 54692
-merge_v3_3hr_v2 <- merge_v3_3hr[merge_v2$Filename,] #50 54931, including demographics and GE for BloodDrawTime == "3" for the 50 samples from Boryana Trial
+##merge_v3_3hr <- (subset(merge_v3, BloodDrawTime == 3))
+##rownames(merge_v3_3hr) <-merge_v3_3hr[,1] #57 54692
+##merge_v3_3hr_v2 <- merge_v3_3hr[merge_v2$Filename,] #50 54931, including demographics and GE for BloodDrawTime == "3" for the 50 samples from Boryana Trial
 
-Filename <- read.csv("C:/Outcome/R_Outcome_Stroke/Input_Output/57_Outcome_Filename_03-04-20.csv", header=T) #all 57 samples for outcome project
+##Filename <- read.csv("C:/Outcome/R_Outcome_Stroke/Input_Output/57_Outcome_Filename_03-04-20.csv", header=T) #all 57 samples for outcome project
+
 Filename_v2 <- read.csv("C:/Outcome/R_Outcome_Stroke/Input_Output/50_Outcome_Filename_03-04-20.csv", header=T) #all 50 samples for outcome project
 
-merge_v3_5hr <- (subset(merge_v3, BloodDrawTime == "5")) #57 54692
-rownames(merge_v3_5hr) <-merge_v3_5hr[,1] #57 54692
+##merge_v3_5hr <- (subset(merge_v3, BloodDrawTime == "5")) #57 54692
+##rownames(merge_v3_5hr) <-merge_v3_5hr[,1] #57 54692
 #x <- gsub("B","24", merge_v2$Filename)
 #y <- gsub("-0-","-24-", x)
 #merge_v3_5hr_v2 <- merge_v3_5hr[y,] #50 54692 including demographics and GE for BloodDrawTime == "5" for the 50 samples from Boryana Trial
-merge_v3_5hr_v2 <- merge_v3_5hr[Filename_v2$X5.hr,]
+
+merge_3hr <- (subset(merge, BloodDrawTime == 3)) #57 54685
+rownames(merge_3hr) <- merge_3hr[,4]
+merge_3hr_v2 <- merge_3hr[Filename_v2$X3.hr,] #50 54685
 
 
-merge_v3_24hr <- (subset(merge_v3, BloodDrawTime == 24)) #57 54692
-rownames(merge_v3_24hr) <-merge_v3_24hr[,1] #57 54692
-merge_v3_24hr_v2 <- merge_v3_24hr[Filename_v2$X24.hr,] #50 54931, including demographics and GE for BloodDrawTime == "24" for the 50 samples from Boryana Trial 
+merge_5hr <- (subset(merge, BloodDrawTime == 5)) #57 54685
+rownames(merge_5hr) <- merge_5hr[,4]
+merge_5hr_v2 <- merge_5hr[x,] #50 54685
 
-merge_v4 <- merge.data.frame(merge_v2, MyData, by= "Filename") # 50 54922 having GE for all 50 samples for BloodDrawTime == "3"
+merge_24hr <- (subset(merge, BloodDrawTime == 24)) #57 54685
+rownames(merge_24hr) <- merge_24hr[,4]
+merge_24hr_v2 <- merge_24hr[Filename_v2$X24.hr,] #50 54685
+
+#save
+write.table(merge,file = "../../Input_Output/New/220_GE_03-22-20.txt", col.names = T, sep = "\t") #can use this for downstream analysis. ALso use this for adding more parameters
+save(merge_3hr_v2, file = "../../Input_Output/RData/New/50_GE_3hr_03-22-20.RData")
+save(merge_5hr_v2, file = "../../Input_Output/RData/New/50_GE_5hr_03-22-20.RData")
+save(merge_24hr_v2, file = "../../Input_Output/RData/New/50_GE_24hr_03-22-20.RData")
+
+##merge_v3_5hr_v2 <- merge_v3_5hr[Filename_v2$X5.hr,]
+
+
+##merge_v3_24hr <- (subset(merge_v3, BloodDrawTime == 24)) #57 54692
+##rownames(merge_v3_24hr) <-merge_v3_24hr[,1] #57 54692
+##merge_v3_24hr_v2 <- merge_v3_24hr[Filename_v2$X24.hr,] #50 54931, including demographics and GE for BloodDrawTime == "24" for the 50 samples from Boryana Trial 
+
+##merge_v4 <- merge.data.frame(merge_v2, MyData, by= "Filename") # 50 54922 having GE for all 50 samples for BloodDrawTime == "3"
 
 ```
 
@@ -64,10 +85,14 @@ write.table(merge_v2,file = "../../Input_Output/50_Demographic_Parameter_03-02-2
 
 ```{r}
 #calculate delta for GE coming from different time point
-x<- colnames(merge_v3_3hr_v2) #find number of the transcripts (18:54692)
-y <- colnames(merge_v3_5hr_v2) #find number of the transcripts (18:54692)
-z <-colnames(merge_v3_24hr_v2)  #find number of the transcripts (18:54692)
+##x<- colnames(merge_v3_3hr_v2) #find number of the transcripts (18:54692)
+##y <- colnames(merge_v3_5hr_v2) #find number of the transcripts (18:54692)
+##z <-colnames(merge_v3_24hr_v2)  #find number of the transcripts (18:54692)
 #make sure these three chr are same
+x <- colnames(merge_3hr_v2)
+y <- colnames(merge_5hr_v2)
+z <- colnames(merge_24hr_v2)
+
 setdiff(x,y)
 #character(0)
 setdiff(x,z)
@@ -75,9 +100,14 @@ setdiff(x,z)
 setdiff(y,z)
 #character(0)
 
-threehrsubtractfivehr <- merge_v3_3hr_v2[,c(18:54692)] - merge_v3_5hr_v2[,c(18:54692)] #50 54675 keep 3hr rowname for subtract
-threehrsubtracttwentyfourhr <- merge_v3_3hr_v2[,c(18:54692)] - merge_v3_24hr_v2[,c(18:54692)] #50 54675 keep 3hr rowname for subtract
-fivehrsubtracttwentyfourhr <- merge_v3_5hr_v2[,c(18:54692)] - merge_v3_24hr_v2[,c(18:54692)] #50 54675 keep 5hr rowname for subtract
+threehrsubtractfivehr <- merge_3hr_v2[,c(9:54683)] - merge_5hr_v2[,c(9:54683)] #50 54675 keep 3hr rowname for subtract
+##threehrsubtracttwentyfourhr <- merge_v3_3hr_v2[,c(18:54692)] - merge_v3_24hr_v2[,c(18:54692)] #50 54675 keep 3hr rowname for subtract
+##fivehrsubtracttwentyfourhr <- merge_v3_5hr_v2[,c(18:54692)] - merge_v3_24hr_v2[,c(18:54692)] #50 54675 keep 5hr rowname for subtrac
+
+
+##threehrsubtractfivehr <- merge_v3_3hr_v2[,c(18:54692)] - merge_v3_5hr_v2[,c(18:54692)] #50 54675 keep 3hr rowname for subtract
+##threehrsubtracttwentyfourhr <- merge_v3_3hr_v2[,c(18:54692)] - merge_v3_24hr_v2[,c(18:54692)] #50 54675 keep 3hr rowname for subtract
+##fivehrsubtracttwentyfourhr <- merge_v3_5hr_v2[,c(18:54692)] - merge_v3_24hr_v2[,c(18:54692)] #50 54675 keep 5hr rowname for subtract
 #since I want to keep all the rownames same, used this code to change the rownames
 rownames(fivehrsubtracttwentyfourhr) <- rownames(threehrsubtracttwentyfourhr) #keep 3hr rowname for subtract
 
@@ -255,6 +285,7 @@ save(DS_GE_fivehrsubtracttwentyfourhr,file = "../../Input_Output/RData/25_Demogr
 
 ```{r}
 #load files including GE for 3hr, 5hr and 24hr with Demographic parameters
+#3hr
 load(file = "../../Input_Output/RData/50_Demographic_GE_3hr_03-02-20.RData")
 merge_v3_3hr_v2 %>% dim() #50 54692
 
@@ -270,12 +301,44 @@ names <- rownames(d)
 rownames(d) <- NULL
 data2 <- cbind(names,d) #25 54676
 
-#Here
+
 DS_GE_threehr <- merge(data, data2, by="names") # 25 55156 (x, y in suffix for two files) #55156
 
 #save
 write.csv(DS_GE_threehr,file = "../../Input_Output/25_Demographic_Parameter_GE_threehr_03-20-20.csv")
 save(DS_GE_threehr,file = "../../Input_Output/RData/25_Demographic_Parameter_GE_threehr.RData")
+```
+
+```{r}
+#5hr
+load(file = "../../Input_Output/RData/50_Demographic_GE_5hr_03-02-20.RData")
+merge_v3_5hr_v2 %>% dim() #50 54692
+
+#x <- rownames(DS_Demographic)
+
+#keep the filename of all files same as three hour with "-B-" and "-0-"
+
+y <- c("105-2-4_HGU133_Plus_2.CEL","112-2-1_HGU133_Plus_2.CEL","201-2-4_HGU133_Plus_2.CEL", "210-2-1_HGU133_Plus_2.CEL","225-2-2_HGU133_Plus_2.CEL","236-2-1_HGU133_Plus_2.CEL" , "255-2-5_HGU133_Plus_2.CEL","261-2-1_HGU133_Plus_2.CEL"      "262-2-4_HGU133_Plus_2.CEL" ,  "278-2-4_HGU133_Plus_2.CEL", "279-2-2_HGU133_Plus_2.CEL" "287-2-4_HGU133_Plus_2.CEL"      "289-2-5_HGU133_Plus_2.CEL" "CL102-2-5_HGU133_Plus_2.CEL"    "CL104-2-4_HGU133_Plus_2.CEL", "CL130-2-1_HGU133_Plus_2.CEL"    "CL131-2-1_HGU133_Plus_2.CEL"   
+"CL132-2-3_HGU133_Plus_2.CEL", "CL135-2-6_HGU133_Plus_2.CEL"  "CL138-2-2_HGU133_Plus_2.CEL"    "CL150-2-3_HGU133_Plus_2.CEL"   ")
+y <- DS_GE_threehr$names
+DS_GE_fivehr <- merge_v3_5hr_v2[y, ] #25 54692 
+#d <- DS_Demographic
+#names <- rownames(d)
+#rownames(d) <- NULL
+#data <- cbind(names,d) #25 464
+
+d <- DS_GE_threehr
+names <- rownames(d)
+rownames(d) <- NULL
+data2 <- cbind(names,d) #25 54676
+
+
+DS_GE_threehr <- merge(data, data2, by="names") # 25 55156 (x, y in suffix for two files) #55156
+
+#save
+write.csv(DS_GE_threehr,file = "../../Input_Output/25_Demographic_Parameter_GE_threehr_03-20-20.csv")
+save(DS_GE_threehr,file = "../../Input_Output/RData/25_Demographic_Parameter_GE_threehr.RData")
+```
 
 
 save(merge_v3_3hr, file = "../../Input_Output/RData/57_Demographic_GE_3hr_03-02-20.RData")
