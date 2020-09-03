@@ -602,4 +602,85 @@ NBVS <- read.csv(file="../../Input_Output/NBVS_NewCorrectedDerivationSet_02-21-1
 ```
 
 
+```{r}
+#Plot for GRIA1 for Model 104
+
+Model104_maingene_small <- read.delim("C:/Outcome/R_Outcome_Stroke/Input_Output/Jin-Moo_Project/CloneOfModel104_RemoveBatch_OnABCB5-ADAM23-GRIA1expression_08-31-20_Small_09-01-20.txt", header=TRUE, row.names=1)
+
+```
+
+```{r}
+y <- ggplot(Model104_maingene_small, aes(x=Model104_maingene_small$X2hrSubtract24hr, y=Model104_maingene_small$X211520_s_at)) + 
+  geom_point(size =3)+
+  geom_smooth(method=lm, se=FALSE, color="black")
+y2= print(y + labs(y="GRIA1 Expression", x = expression(Delta~NIHSS)))
+
+
+y3 = y2 + theme_bw()  # Black and white theme
+
+y4= y3 + theme_classic()
+
+y2 + theme(
+  # Hide panel borders and remove grid lines
+  panel.border = element_blank(),
+  panel.grid.major = element_blank(),
+  panel.grid.minor = element_blank(),
+  # Change axis line
+  axis.line = element_line(colour = "black")
+  )
+
+ggsave(y4, file="../../Input_Output/Jin-Moo_Project/Model104_GRIA1_v2.pdf",width = 6, height = 4)
+ggsave(y4, file="../../Input_Output/Jin-Moo_Project/Model104_GRIA1_v2.jpg",width = 6, height = 4)
+
+```
+
+```{r}
+y <- ggplot(Model104_maingene_small, aes(x=Model104_maingene_small$X2hrSubtract24hr, y=Model104_maingene_small$X1555371_at)) + 
+  geom_point(size =3)+
+  geom_smooth(method=lm, se=FALSE, color="black")
+y2= print(y + labs(y="ABCB5 Expression", x = expression(Delta~NIHSS)))
+
+
+y3 = y2 + theme_bw()  # Black and white theme
+
+y4= y3 + theme_classic()
+
+y2 + theme(
+  # Hide panel borders and remove grid lines
+  panel.border = element_blank(),
+  panel.grid.major = element_blank(),
+  panel.grid.minor = element_blank(),
+  # Change axis line
+  axis.line = element_line(colour = "black")
+  )
+
+ggsave(y4, file="../../Input_Output/Jin-Moo_Project/Model104_ABCB5-1555371_at.pdf",width = 6, height = 4)
+ggsave(y4, file="../../Input_Output/Jin-Moo_Project/Model104_ABCB5-1555371_at.jpg",width = 6, height = 4)
+
+
+```
+
+```{r}
+y <- ggplot(Model104_maingene_small, aes(x=Model104_maingene_small$X2hrSubtract24hr, y=Model104_maingene_small$X1569072_s_at)) + 
+  geom_point(size =3)+
+  geom_smooth(method=lm, se=FALSE, color="black")
+y2= print(y + labs(y="ABCB5 Expression", x = expression(Delta~NIHSS)))
+
+
+y3 = y2 + theme_bw()  # Black and white theme
+
+y4= y3 + theme_classic()
+
+y2 + theme(
+  # Hide panel borders and remove grid lines
+  panel.border = element_blank(),
+  panel.grid.major = element_blank(),
+  panel.grid.minor = element_blank(),
+  # Change axis line
+  axis.line = element_line(colour = "black")
+  )
+
+ggsave(y4, file="../../Input_Output/Jin-Moo_Project/Model104_ABCB5-1569072_s_at.pdf",width = 6, height = 4)
+ggsave(y4, file="../../Input_Output/Jin-Moo_Project/Model104_ABCB5-1569072_s_at.jpg",width = 6, height = 4)
+```
 
