@@ -715,3 +715,68 @@ ggsave(y4, file="../../Input_Output/Jin-Moo_Project/Model99_GRIA1_v2.pdf",width 
 ggsave(y4, file="../../Input_Output/Jin-Moo_Project/Model99_GRIA1_v2.jpg",width = 6, height = 4)
 
 ```
+
+```{r}
+#Plot for MMP11, MMP14, IL-27 for Model 76 (HGS Presentation)
+
+Model76_small <- read.delim("C:/Outcome/Partek_Analysis/New/Model76_RemoveBatch_10-21-20.txt", header=TRUE, row.names=1)
+```
+
+```{r}
+y <- ggplot(Model76_small, aes(x=Model76_small$BaseSubtract90day_Improvement, y=Model76_small$X1552995_at, color = Model76_small$Gender)) + 
+  geom_point(size =3)+
+  geom_smooth(method=lm, se=FALSE, color="black")
+y2= print(y + labs(y="IL-27 Expression", x = expression(Improvement~NIHSS)))
+
+
+y3 = y2 + theme_bw()  # Black and white theme
+
+
+y4= y3 + theme_classic()
+
+
+ggsave(y4, file="../../Input_Output/Outcome_Result/Model76_IL-27.pdf",width = 6, height = 4)
+ggsave(y4, file="../../Input_Output/Outcome_Result/Model76_IL-27.jpg",width = 6, height = 4)
+```
+
+```{r}
+Model76_small <- read.delim("C:/Outcome/Partek_Analysis/New/Model76_RemoveBatch_OnlyOnMale_10-21-20.txt", header=TRUE, row.names=1)
+```
+
+```{r}
+y <- ggplot(Model76_small, aes(x=Model76_small$BaseSubtract90day_Improvement, y=Model76_small$X1552995_at)) + 
+  geom_point(size =3, color = "cyan3")+
+  geom_smooth(method=lm, se=FALSE, color="black")
+y2= print(y + labs(y="IL-27 Expression", x = expression(Improvement~NIHSS)))
+
+
+y3 = y2 + theme_bw()  # Black and white theme
+
+
+y4= y3 + theme_classic()
+
+
+ggsave(y4, file="../../Input_Output/Outcome_Result/Model76_IL-27_OnMale.pdf",width = 6, height = 4)
+ggsave(y4, file="../../Input_Output/Outcome_Result/Model76_IL-27_OnMale.jpg",width = 6, height = 4)
+```
+
+```{r}
+Model76_small <- read.delim("C:/Outcome/Partek_Analysis/New/Model76_RemoveBatch_OnlyOnFemale_10-21-20", header=TRUE, row.names=1)
+```
+
+```{r}
+y <- ggplot(Model76_small, aes(x=Model76_small$BaseSubtract90day_Improvement, y=Model76_small$X1552995_at)) + 
+  geom_point(size =3, color="tomato1")+
+  geom_smooth(method=lm, se=FALSE, color="black")
+y2= print(y + labs(y="IL-27 Expression", x = expression(Improvement~NIHSS)))
+
+
+y3 = y2 + theme_bw()  # Black and white theme
+
+
+y4= y3 + theme_classic()
+
+
+ggsave(y4, file="../../Input_Output/Outcome_Result/Model76_IL-27_OnFemale.pdf",width = 6, height = 4)
+ggsave(y4, file="../../Input_Output/Outcome_Result/Model76_IL-27_OnFemale.jpg",width = 6, height = 4)
+```
