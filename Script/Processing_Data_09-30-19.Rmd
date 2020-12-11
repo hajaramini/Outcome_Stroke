@@ -723,9 +723,10 @@ Model76_small <- read.delim("C:/Outcome/Partek_Analysis/New/Model76_RemoveBatch_
 ```
 
 ```{r}
-y <- ggplot(Model76_small, aes(x=Model76_small$BaseSubtract90day_Improvement, y=Model76_small$X1552995_at, color = Model76_small$Gender)) + 
+y1 <- ggplot(Model76_small, aes(y=Model76_small$BaseSubtract90day_Improvement, x=Model76_small$X1552995_at, color = Model76_small$Gender)) + 
   geom_point(size =3)+
   geom_smooth(method=lm, se=FALSE, color="black")
+
 y2= print(y + labs(y="IL-27 Expression", x = expression(Improvement~NIHSS)))
 
 
