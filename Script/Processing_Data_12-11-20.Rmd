@@ -1,0 +1,36 @@
+---
+title: "Processing_Data_12-11-20"
+output: html_document
+---
+
+#calculate the subtraction matrix for the predication on 108 ClearTrial samples
+
+```{r}
+#import data
+MyData_3h <- read.csv(file="../../Input_Output/Predication/RMAImport_36CLEARTrial_ExcludeLessThanOrEqualTo3_Exclude_x_atAnd_s_at_Only3hGE_12-10-20.txt", header=TRUE, sep="\t", stringsAsFactors = FALSE, check.names=FALSE) #36 28690
+
+
+MyData_5h <- read.csv(file="../../Input_Output/Predication/RMAImport_36CLEARTrial_ExcludeLessThanOrEqualTo3_Exclude_x_atAnd_s_at_Only5hGE_12-09-20.txt", header=TRUE, sep="\t", stringsAsFactors = FALSE, check.names=FALSE) #36 28690
+
+MyData_24h <- read.csv(file="../../Input_Output/Predication/RMAImport_36CLEARTrial_ExcludeLessThanOrEqualTo3_Exclude_x_atAnd_s_at_Only24hGE_12-09-20.txt", header=TRUE, sep="\t", stringsAsFactors = FALSE, check.names=FALSE) #36 28690
+
+```
+
+```{r}
+#x <- colnames(MyData_3h)
+#y <- colnames(MyData_5h)
+#z <- colnames(MyData_24h)
+
+setdiff(x,y)
+#character(0)
+setdiff(x,z)
+#character(0)
+setdiff(y,z)
+#character(0)
+```
+
+
+```{r}
+threehrsubtractfivehr <- merge_3hr_v2[,c(9:54683)] - merge_5hr_v2[,c(9:54683)
+```
+
