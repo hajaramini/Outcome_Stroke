@@ -38,7 +38,7 @@ rownames(threehrsubtractfivehr) <- MyData_3h$Filename
 ```{r}
 #save
 save(threehrsubtractfivehr, file = "../../Input_Output/Predication/RData/3hrSubtract5hr_GE_12-14-20.RData")
-write.table(threehrsubtractfivehr,file = "../../Input_Output/Predication/3hrSubtract5hr_GE_12-14-20.csv", col.names = T, sep = "\t")
+write.csv(threehrsubtractfivehr,file = "../../Input_Output/Predication/3hrSubtract5hr_GE_12-14-20.csv", col.names = T, sep = "\t")
 ```
 
 ```{r}
@@ -49,5 +49,16 @@ rownames(threehrsubtracttwentyFourhr) <- MyData_3h$Filename
 ```{r}
 #save
 save(threehrsubtracttwentyFourhr, file = "../../Input_Output/Predication/RData/3hrSubtract24hr_GE_12-14-20.RData")
-write.table(threehrsubtracttwentyFourhr,file = "../../Input_Output/Predication/3hrSubtract24hr_GE_12-14-20.csv", col.names = T, sep = "\t")
+write.csv(threehrsubtracttwentyFourhr,file = "../../Input_Output/Predication/3hrSubtract24hr_GE_12-14-20.csv", col.names = T, sep = "\t")
+```
+
+```{r}
+FivehrsubtracttwentyFourhr <- MyData_5h[,c(5:28690)] - MyData_24h[,c(5:28690)] #36 28686
+rownames(FivehrsubtracttwentyFourhr) <- MyData_3h$Filename
+```
+
+```{r}
+#save
+save(FivehrsubtracttwentyFourhr, file = "../../Input_Output/Predication/RData/5hrSubtract24hr_GE_12-14-20.RData")
+write.csv(FivehrsubtracttwentyFourhr,file = "../../Input_Output/Predication/5hrSubtract24hr_GE_12-14-20.csv", col.names = T, sep = "\t")
 ```
