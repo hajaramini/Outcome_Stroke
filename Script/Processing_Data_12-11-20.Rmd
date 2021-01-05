@@ -4,15 +4,15 @@ output: html_document
 ---
 
 #calculate the subtraction matrix for the predication on 108 ClearTrial samples
-
+#redo the script for latest version "RMAImport_108CLEARTrial_12-07-20.ppj"
 ```{r}
 #import data
-MyData_3h <- read.csv(file="../../Input_Output/Predication/RMAImport_36CLEARTrial_ExcludeLessThanOrEqualTo3_Exclude_x_atAnd_s_at_Only3hGE_12-10-20.txt", header=TRUE, sep="\t", stringsAsFactors = FALSE, check.names=FALSE) #36 28690
+MyData_3h <- read.csv(file="../../Input_Output/Predication/DemographicInformation_RMAImport_DS-VS_36CLEARTrial_ExcludeLessThanOrEqualTo3_Exclude_x_atAnd_s_at_3hrForGE_12-30-20_SentToBodie_01-02-2021.txt", header=TRUE, sep="\t", stringsAsFactors = FALSE, check.names=FALSE) #36 28919
 
 
-MyData_5h <- read.csv(file="../../Input_Output/Predication/RMAImport_36CLEARTrial_ExcludeLessThanOrEqualTo3_Exclude_x_atAnd_s_at_Only5hGE_12-09-20.txt", header=TRUE, sep="\t", stringsAsFactors = FALSE, check.names=FALSE) #36 28690
+MyData_5h <- read.csv(file="../../Input_Output/Predication/DemographicInformation_RMAImport_DS-VS_36CLEARTrial_ExcludeLessThanOrEqualTo3_Exclude_x_atAnd_s_at_5hrForGE_12-30-20_SentToBodie_01-02-2021.txt", header=TRUE, sep="\t", stringsAsFactors = FALSE, check.names=FALSE) #36 28919
 
-MyData_24h <- read.csv(file="../../Input_Output/Predication/RMAImport_36CLEARTrial_ExcludeLessThanOrEqualTo3_Exclude_x_atAnd_s_at_Only24hGE_12-09-20.txt", header=TRUE, sep="\t", stringsAsFactors = FALSE, check.names=FALSE) #36 28690
+MyData_24h <- read.csv(file="../../Input_Output/Predication/DemographicInformation_RMAImport_DS-VS_36CLEARTrial_ExcludeLessThanOrEqualTo3_Exclude_x_atAnd_s_at_24hrForGE_12-30-20_SentToBodie_01-02-2021.txt", header=TRUE, sep="\t", stringsAsFactors = FALSE, check.names=FALSE) #36 28919
 
 ```
 
@@ -31,34 +31,34 @@ setdiff(y,z)
 
 
 ```{r}
-threehrsubtractfivehr <- MyData_3h[,c(5:28690)] - MyData_5h[,c(5:28690)] #36 28686
+threehrsubtractfivehr <- MyData_3h[,c(234:28919)] - MyData_5h[,c(234:28919)] #36 28686
 rownames(threehrsubtractfivehr) <- MyData_3h$Filename
 ```
 
 ```{r}
 #save
-save(threehrsubtractfivehr, file = "../../Input_Output/Predication/RData/3hrSubtract5hr_GE_12-14-20.RData")
-write.csv(threehrsubtractfivehr,file = "../../Input_Output/Predication/3hrSubtract5hr_GE_12-14-20.csv", col.names = T, sep = "\t")
+save(threehrsubtractfivehr, file = "../../Input_Output/Predication/RData/3hrSubtract5hr_GE_01-04-2021.RData")
+write.csv(threehrsubtractfivehr,file = "../../Input_Output/Predication/3hrSubtract5hr_GE_01-04-2021.csv", col.names = T, sep = "\t")
 ```
 
 ```{r}
-threehrsubtracttwentyFourhr <- MyData_3h[,c(5:28690)] - MyData_24h[,c(5:28690)] #36 28686
+threehrsubtracttwentyFourhr <- MyData_3h[,c(234:28919)] - MyData_24h[,c(234:28919)] #36 28686
 rownames(threehrsubtracttwentyFourhr) <- MyData_3h$Filename
 ```
 
 ```{r}
 #save
-save(threehrsubtracttwentyFourhr, file = "../../Input_Output/Predication/RData/3hrSubtract24hr_GE_12-14-20.RData")
-write.csv(threehrsubtracttwentyFourhr,file = "../../Input_Output/Predication/3hrSubtract24hr_GE_12-14-20.csv", col.names = T, sep = "\t")
+save(threehrsubtracttwentyFourhr, file = "../../Input_Output/Predication/RData/3hrSubtract24hr_GE_01-04-2021.RData")
+write.csv(threehrsubtracttwentyFourhr,file = "../../Input_Output/Predication/3hrSubtract24hr_GE_01-04-2021.csv", col.names = T, sep = "\t")
 ```
 
 ```{r}
-FivehrsubtracttwentyFourhr <- MyData_5h[,c(5:28690)] - MyData_24h[,c(5:28690)] #36 28686
+FivehrsubtracttwentyFourhr <- MyData_5h[,c(234:28919)] - MyData_24h[,c(234:28919)] #36 28686
 rownames(FivehrsubtracttwentyFourhr) <- MyData_3h$Filename
 ```
 
 ```{r}
 #save
-save(FivehrsubtracttwentyFourhr, file = "../../Input_Output/Predication/RData/5hrSubtract24hr_GE_12-14-20.RData")
-write.csv(FivehrsubtracttwentyFourhr,file = "../../Input_Output/Predication/5hrSubtract24hr_GE_12-14-20.csv", col.names = T, sep = "\t")
+save(FivehrsubtracttwentyFourhr, file = "../../Input_Output/Predication/RData/5hrSubtract24hr_GE_01-04-2021.RData")
+write.csv(FivehrsubtracttwentyFourhr,file = "../../Input_Output/Predication/5hrSubtract24hr_GE_01-04-2021.csv", col.names = T, sep = "\t")
 ```
