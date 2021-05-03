@@ -34,11 +34,22 @@ setdiff(y,z)
 threehrsubtractfivehr <- MyData_3h[,c(234:28919)] - MyData_5h[,c(234:28919)] #36 28686
 rownames(threehrsubtractfivehr) <- MyData_3h$Filename
 ```
-
 ```{r}
 #save
 save(threehrsubtractfivehr, file = "../../Input_Output/Predication/RData/3hrSubtract5hr_GE_01-04-2021.RData")
 write.csv(threehrsubtractfivehr,file = "../../Input_Output/Predication/3hrSubtract5hr_GE_01-04-2021.csv", col.names = T, sep = "\t")
+```
+
+```{r}
+#We decided to do subtraction in this way (newer-older) since 04-28-2021
+fivehrsubtractthreehr <- MyData_5h[,c(234:28919)] - MyData_3h[,c(234:28919)] #36 28686
+rownames(fivehrsubtractthreehr) <- MyData_3h$Filename
+```
+
+```{r}
+#save
+save(fivehrsubtractthreehr, file = "../../Input_Output/Predication/RData/5hrSubtract3hr_GE_04-28-2021.RData")
+write.csv(fivehrsubtractthreehr,file = "../../Input_Output/Predication/5hrSubtract3hr_GE_04-28-2021.csv", col.names = T, sep = "\t")
 ```
 
 ```{r}
@@ -53,6 +64,17 @@ write.csv(threehrsubtracttwentyFourhr,file = "../../Input_Output/Predication/3hr
 ```
 
 ```{r}
+twentyFourhrsubtractthree <- MyData_24h[,c(234:28919)] - MyData_3h[,c(234:28919)] #36 28686
+rownames(twentyFourhrsubtractthree) <- MyData_3h$Filename
+```
+
+```{r}
+#save
+save(twentyFourhrsubtractthree, file = "../../Input_Output/Predication/RData/24hrSubtract3hr_GE_05-03-2021.RData")
+write.csv(twentyFourhrsubtractthree,file = "../../Input_Output/Predication/24hrSubtract3hr_GE_05-03-2021.csv", col.names = T, sep = "\t")
+```
+
+```{r}
 FivehrsubtracttwentyFourhr <- MyData_5h[,c(234:28919)] - MyData_24h[,c(234:28919)] #36 28686
 rownames(FivehrsubtracttwentyFourhr) <- MyData_3h$Filename
 ```
@@ -61,4 +83,15 @@ rownames(FivehrsubtracttwentyFourhr) <- MyData_3h$Filename
 #save
 save(FivehrsubtracttwentyFourhr, file = "../../Input_Output/Predication/RData/5hrSubtract24hr_GE_01-04-2021.RData")
 write.csv(FivehrsubtracttwentyFourhr,file = "../../Input_Output/Predication/5hrSubtract24hr_GE_01-04-2021.csv", col.names = T, sep = "\t")
+```
+
+```{r}
+twentyFourhrsubtractFivehr <- MyData_24h[,c(234:28919)] - MyData_5h[,c(234:28919)] #36 28686
+rownames(twentyFourhrsubtractFivehr) <- MyData_3h$Filename
+```
+
+```{r}
+#save
+save(twentyFourhrsubtractFivehr, file = "../../Input_Output/Predication/RData/24hrSubtract5hr_GE_05-03-2021.RData")
+write.csv(twentyFourhrsubtractFivehr,file = "../../Input_Output/Predication/24hrSubtract5hr_GE_05-03-2021.csv", col.names = T, sep = "\t")
 ```
