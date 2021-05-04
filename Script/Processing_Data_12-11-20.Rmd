@@ -95,3 +95,22 @@ rownames(twentyFourhrsubtractFivehr) <- MyData_3h$Filename
 save(twentyFourhrsubtractFivehr, file = "../../Input_Output/Predication/RData/24hrSubtract5hr_GE_05-03-2021.RData")
 write.csv(twentyFourhrsubtractFivehr,file = "../../Input_Output/Predication/24hrSubtract5hr_GE_05-03-2021.csv", col.names = T, sep = "\t")
 ```
+
+```{r}
+#With Internal Gene Normalized value
+MyData_3h <- read.csv(file="../../Input_Output/Predication/IntNormGene/RMAimport36CLEARTrial_V4_GeoMeanOf38MostStableProbeset_DividedByGeoMeanOf38MostStableProbeset_11-30-20_Exclude_x_atAnd_s_at_Only3hGE_04-12-2021.csv", header=TRUE, sep=",", stringsAsFactors = FALSE, check.names=FALSE) #36 39308
+
+MyData_24h <- read.csv(file="../../Input_Output/Predication/IntNormGene/RMAimport36CLEARTrial_V4_GeoMeanOf38MostStableProbeset_DividedByGeoMeanOf38MostStableProbeset_11-30-20_Exclude_x_atAnd_s_at_Only24hGE_04-02-2021.csv", header=TRUE, sep=",", stringsAsFactors = FALSE, check.names=FALSE) #36 39308
+```
+
+```{r}
+#With Internal Gene Normalized value
+twentyFourhrsubtractthree <- MyData_24h[,c(234:39308)] - MyData_3h[,c(234:39308)] #36 39075
+rownames(twentyFourhrsubtractthree) <- MyData_3h$Filename
+```
+
+```{r}
+#save
+save(twentyFourhrsubtractthree, file = "../../Input_Output/Predication/RData/IntNormGene/24hrSubtract3hr_GE_05-04-2021.RData")
+write.csv(twentyFourhrsubtractthree,file = "../../Input_Output/Predication/IntNormGene/24hrSubtract3hr_GE_05-04-2021.csv", col.names = T, sep = "\t")
+```
