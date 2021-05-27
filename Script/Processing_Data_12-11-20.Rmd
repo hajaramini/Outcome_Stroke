@@ -114,3 +114,22 @@ rownames(twentyFourhrsubtractthree) <- MyData_3h$Filename
 save(twentyFourhrsubtractthree, file = "../../Input_Output/Predication/RData/IntNormGene/24hrSubtract3hr_GE_05-04-2021.RData")
 write.csv(twentyFourhrsubtractthree,file = "../../Input_Output/Predication/IntNormGene/24hrSubtract3hr_GE_05-04-2021.csv", col.names = T, sep = "\t")
 ```
+
+
+```{r}
+#With RMA value For Biology Part
+MyData_3h <- read.csv(file="../../Input_Output/Biology_Part/RMAimport_108CLEARTrialAnd18SAVVYSamples_ExcludeLessThanOrEqualTo3_05-10-2021_3hrGE_05-11-2021.csv", header=TRUE, sep=",", stringsAsFactors = FALSE, check.names=FALSE) #36 43923
+
+MyData_24h <- read.csv(file="../../Input_Output/Biology_Part/RMAimport_108CLEARTrialAnd18SAVVYSamples_ExcludeLessThanOrEqualTo3_05-10-2021_24hrGE_05-11-2021.csv", header=TRUE, sep=",", stringsAsFactors = FALSE, check.names=FALSE) #36 43923
+```
+
+```{r}
+twentyFourhrsubtractthree <- MyData_24h[,c(234:43923)] - MyData_3h[,c(234:43923)] #36 43690
+rownames(twentyFourhrsubtractthree) <- MyData_3h$Filename
+```
+
+```{r}
+#save
+save(twentyFourhrsubtractthree, file = "../../Input_Output/Biology_Part/RData/24hrSubtract3hr_GE_05-27-2021.RData")
+write.csv(twentyFourhrsubtractthree,file = "../../Input_Output/Biology_Part/24hrSubtract3hr_GE_05-27-2021.csv", col.names = T, sep = "\t")
+```
