@@ -133,3 +133,18 @@ rownames(twentyFourhrsubtractthree) <- MyData_3h$Filename
 save(twentyFourhrsubtractthree, file = "../../Input_Output/Biology_Part/RData/24hrSubtract3hr_GE_05-27-2021.RData")
 write.csv(twentyFourhrsubtractthree,file = "../../Input_Output/Biology_Part/24hrSubtract3hr_GE_05-27-2021.csv", col.names = T, sep = "\t")
 ```
+
+```{r}
+MyData_5h <- read.csv(file="../../Input_Output/Biology_Part/RMAimport_108CLEARTrialAnd18SAVVYSamples_ExcludeLessThanOrEqualTo3_05-10-2021_5hrGE_05-11-2021.csv", header=TRUE, sep=",", stringsAsFactors = FALSE, check.names=FALSE) #36 43923
+```
+
+```{r}
+twentyFourhrsubtractfive <- MyData_24h[,c(234:43923)] - MyData_5h[,c(234:43923)] #36 43690
+rownames(twentyFourhrsubtractfive) <- MyData_5h$Filename
+```
+
+```{r}
+#save
+save(twentyFourhrsubtractfive, file = "../../Input_Output/Biology_Part/RData/24hrSubtract5hr_GE_06-07-2021.RData")
+write.csv(twentyFourhrsubtractfive,file = "../../Input_Output/Biology_Part/24hrSubtract5hr_GE_06-07-2021.csv", col.names = T, sep = "\t")
+```
